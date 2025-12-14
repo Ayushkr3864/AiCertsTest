@@ -6,7 +6,7 @@ const BatchSchema = new mongoose.Schema(
     total: Number,
     valid: Number,
     invalid: Number,
-    errors: [String],
+    errorList: [String],
     status: {
       type: String,
       enum: ["VALIDATED", "FAILED", "PROCESSING", "COMPLETED"],
