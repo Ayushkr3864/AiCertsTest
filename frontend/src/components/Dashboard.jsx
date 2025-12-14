@@ -13,7 +13,8 @@ const API_BASE = "http://localhost:3000/dashboard";
 const pdfUrl = "http://localhost:3000";
 
 export default function CertificateDashboard() {
-  const [certificates, setCertificates] = useState([]);
+    const [certificates, setCertificates] = useState([]);
+    const [allcertificates, setallCertificates] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // 🔹 Fetch certificates from backend
@@ -22,8 +23,8 @@ export default function CertificateDashboard() {
       const res = await fetch(`${API_BASE}/api/certificates`);
         const data = await res.json();
         console.log(data);
-        
-      setCertificates(data);
+        setCertificates(data.certificates);
+        setallCertificates(data.allcertificates)
     } catch (err) {
       console.error("Failed to fetch certificates", err);
     }
@@ -78,7 +79,6 @@ export default function CertificateDashboard() {
                 >
                   <Eye size={18} />
                 </button>
-
                 {/* Retry (only if FAILED) */}
                 {cert.status === "FAILED" && (
                   <button

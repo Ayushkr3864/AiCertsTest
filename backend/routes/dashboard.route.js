@@ -1,9 +1,11 @@
-const express = require("express")
+const express = require("express");
+const ProjectDB = require("../models/ProjectDB");
 const app = express.Router()
 
 app.get("/", async (req, res) => {
   res.send("server is running");
 });
+
 let certificates = [
   {
     _id: "1",
@@ -34,8 +36,12 @@ function simulateIssuance(cert) {
   }, 4000);
 }
 
-app.get("/api/certificates", (req, res) => {
-  res.json(certificates);
+app.get("/api/certificates", async (req, res) => {
+    const allcertificates = await ProjectDB.find()
+    const pdfurl = allcertificates
+    console.log(pdfurl);
+    
+  res.json({certificates,pdfurl});
 });
 
 app.post("/certificates/:id/retry", (req, res) => {
