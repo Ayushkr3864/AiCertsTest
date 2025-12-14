@@ -32,7 +32,7 @@ export default function UploadBatchZip() {
       formData.append("batchZip", zipFile);
 
       const res = await axios.post(
-        "http://localhost:3000/api/batch/validate",
+        "https://aicertstest.onrender.com/api/batch/validate",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

@@ -69,10 +69,13 @@ export default function CreateProjectStep1() {
       formData.append("templatePdf", pdfFile);
       formData.append("qrCoordinates", JSON.stringify(qrCoords));
 
-      const res = await fetch("http://localhost:3000/api/projects", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(
+        "https://aicertstest.onrender.com/api/projects",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Submission failed");

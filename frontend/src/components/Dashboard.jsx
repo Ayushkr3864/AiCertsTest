@@ -9,8 +9,8 @@ const STATUS_COLORS = {
   FAILED: "text-red-500",
 };
 
-const API_BASE = "http://localhost:3000/dashboard";
-const pdfUrl = "http://localhost:3000";
+const API_BASE = "https://aicertstest.onrender.com/dashboard";
+const pdfUrl = "https://aicertstest.onrender.com";
 
 export default function CertificateDashboard() {
     const [certificates, setCertificates] = useState([]);
