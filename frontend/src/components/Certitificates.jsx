@@ -7,11 +7,12 @@ import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
 import pdfWorker from "pdfjs-dist/build/pdf.worker.min?url";
+import { useNavigate } from "react-router-dom";
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 export default function CreateProjectStep1() {
   const pdfWrapperRef = useRef(null);
-
+const navigate = useNavigate()
   const [form, setForm] = useState({
     projectName: "",
     description: "",
@@ -81,6 +82,7 @@ export default function CreateProjectStep1() {
       if (!res.ok) throw new Error(data.message || "Submission failed");
       alert("Project created successfully");
       console.log(data);
+      navigate("/")
     } catch (err) {
       alert(err.message);
     }

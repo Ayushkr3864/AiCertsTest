@@ -1,30 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Eye, RefreshCcw, RotateCcw, ExternalLink } from "lucide-react";
+import { motion } from "framer-motion";
 import BatchProgress from "./BatchProgress";
 
 const STATUS_COLORS = {
-  PENDING: "text-yellow-500",
-  IN_PROGRESS: "text-blue-500",
-  ISSUED: "text-green-500",
-  FAILED: "text-red-500",
+  PENDING: "text-yellow-400",
+  IN_PROGRESS: "text-blue-400",
+  ISSUED: "text-green-400",
+  FAILED: "text-red-400",
 };
 
 const API_BASE = "https://aicertstest.onrender.com/dashboard";
 const pdfUrl = "https://aicertstest.onrender.com";
 
 export default function CertificateDashboard() {
-    const [certificates, setCertificates] = useState([]);
-    const [allcertificates, setallCertificates] = useState([]);
+  const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // 🔹 Fetch certificates from backend
   const fetchCertificates = async () => {
     try {
       const res = await fetch(`${API_BASE}/api/certificates`);
-        const data = await res.json();
-        console.log(data);
-        setCertificates(data.certificates);
-        setallCertificates(data.allcertificates)
+      const data = await res.json();
+      setCertificates(data.certificates);
     } catch (err) {
       console.error("Failed to fetch certificates", err);
     }
@@ -34,14 +31,13 @@ export default function CertificateDashboard() {
     fetchCertificates();
   }, []);
 
-  // 🔹 Retry / Reissue actions
   const handleAction = async (id, action) => {
     setLoading(true);
     try {
       await fetch(`${API_BASE}/api/certificates/${id}/${action}`, {
         method: "POST",
       });
-      fetchCertificates(); // refresh state after action
+      fetchCertificates();
     } catch (err) {
       console.error("Action failed", err);
     } finally {
@@ -50,72 +46,89 @@ export default function CertificateDashboard() {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Issuance Dashboard</h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 p-6">
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-6xl mx-auto bg-slate-900/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 p-6"
+      >
+        <motion.h1
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-2xl font-bold text-white mb-6"
+        >
+          Issuance Dashboard
+        </motion.h1>
 
-      <table className="w-full border rounded-lg">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="p-2 text-left">Certificate ID</th>
-            <th className="p-2 text-left">Status</th>
-            <th className="p-2 text-left">Actions</th>
-          </tr>
-        </thead>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left text-slate-300">
+            <thead className="text-xs uppercase bg-white/10">
+              <tr>
+                <th className="p-3">Certificate ID</th>
+                <th className="p-3">Status</th>
+                <th className="p-3">Actions</th>
+              </tr>
+            </thead>
 
-        <tbody>
-          {certificates.map((cert) => (
-            <tr key={cert._id} className="border-t">
-              <td className="p-2">{cert.certificateId}</td>
-
-              <td className={`p-2 font-medium ${STATUS_COLORS[cert.status]}`}>
-                {cert.status}
-              </td>
-
-              <td className="p-2 flex gap-3 items-center">
-                {/* View PDF */}
-                <button
-                  title="View"
-                  onClick={() => window.open(`${pdfUrl}/${cert.pdfUrl}`, "_blank")}
+            <tbody>
+              {certificates.map((cert, index) => (
+                <motion.tr
+                  key={cert._id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="border-t border-white/10 hover:bg-white/5"
                 >
-                  <Eye size={18} />
-                </button>
-                {/* Retry (only if FAILED) */}
-                {cert.status === "FAILED" && (
-                  <button
-                    title="Retry"
-                    disabled={loading}
-                    onClick={() => handleAction(cert._id, "retry")}
+                  <td className="p-3">{cert.certificateId}</td>
+
+                  <td
+                    className={`p-3 font-semibold ${
+                      STATUS_COLORS[cert.status]
+                    }`}
                   >
-                    <RefreshCcw size={18} />
-                  </button>
-                )}
+                    {cert.status}
+                  </td>
 
-                {/* Reissue */}
-                <button
-                  title="Reissue"
-                  disabled={loading}
-                  onClick={() => handleAction(cert._id, "reissue")}
-                >
-                  <RotateCcw size={18} />
-                </button>
+                  <td className="p-3 flex gap-3 items-center">
+                   
 
-                {/* Verification Portal */}
-                <a
-                  href={`https://verify.example.com?id=${cert.certificateId}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  title="Verify"
-                >
-                  <ExternalLink size={18} />
-                </a>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                    {cert.status === "FAILED" && (
+                      <motion.button
+                        whileHover={{ scale: 1.15 }}
+                        whileTap={{ scale: 0.9 }}
+                        disabled={loading}
+                        title="Retry"
+                        onClick={() => handleAction(cert._id, "retry")}
+                      >
+                        <RefreshCcw size={18} />
+                      </motion.button>
+                    )}
 
-      {/* Batch progress */}
-      <BatchProgress certificates={certificates} />
+                    <motion.button
+                      whileHover={{ scale: 1.15 }}
+                      whileTap={{ scale: 0.9 }}
+                      disabled={loading}
+                      title="Reissue"
+                      onClick={() => handleAction(cert._id, "reissue")}
+                    >
+                      <RotateCcw size={18} />
+                    </motion.button>
+
+                 
+                  </td>
+                </motion.tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Batch Progress */}
+        <div className="mt-6">
+          <BatchProgress certificates={certificates} />
+        </div>
+      </motion.div>
     </div>
   );
 }

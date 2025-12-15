@@ -7,6 +7,8 @@ import CreateProject from './components/Certitificates'
 import UploadBatchZip from './components/BatchZip'
 import IssuanceDashboard from './components/Dashboard'
 import Home from './components/home'
+import AdminLogin from './components/AdminLogin'
+import Protected from './components/Protected'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -14,9 +16,31 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/create-project" element={<CreateProject />}></Route>
-        <Route path="/upload-batch" element={<UploadBatchZip />}></Route>
-        <Route path="/dashboard" element={<IssuanceDashboard />}></Route>
+        <Route path="login" element={<AdminLogin />}></Route>
+        <Route
+          path="/create-project"
+          element={
+            <Protected>
+              <CreateProject />
+            </Protected>
+          }
+        ></Route>
+        <Route
+          path="/upload-batch"
+          element={
+            <Protected>
+              <UploadBatchZip />
+            </Protected>
+          }
+        ></Route>
+        <Route
+          path="/dashboard"
+          element={
+            <Protected>
+              <IssuanceDashboard />
+            </Protected>
+          }
+        ></Route>
       </Routes>
     </>
   );

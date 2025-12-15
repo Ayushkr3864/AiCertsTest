@@ -13,11 +13,11 @@ export default function BatchProgress({ certificates }) {
 
   return (
     <div className="mt-6">
-      <h2 className="font-semibold mb-3">Batch Progress</h2>
+      <h2 className="font-semibold mb-3 text-white">Batch Progress</h2>
 
       {Object.entries(batches).map(([batchId, data]) => (
         <div key={batchId} className="mb-3">
-          <p className="text-sm mb-1">
+          <p className="text-sm mb-1 text-white">
             Batch {batchId}: {data.completed}/{data.total} complete
           </p>
 
