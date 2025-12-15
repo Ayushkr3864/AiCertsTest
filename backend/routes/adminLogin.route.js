@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
     });
     res.cookie("admintoken", token, {
       httpOnly: true,
-      sameSite: "strict", // CSRF protection
+      sameSite: "none", // CSRF protection
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
     res.status(200).json({
