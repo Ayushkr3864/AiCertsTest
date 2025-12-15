@@ -36,6 +36,8 @@ router.post("/", async (req, res) => {
       httpOnly: true,
       sameSite: "none", // CSRF protection
       maxAge: 24 * 60 * 60 * 1000, // 1 day
+      secure: true,
+      path:"/"
     });
     res.status(200).json({
       message: "Admin login successful",
