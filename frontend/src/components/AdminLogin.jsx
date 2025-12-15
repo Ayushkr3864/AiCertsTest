@@ -23,8 +23,6 @@ const navigate = useNavigate()
       navigate("/")
       alert("login successfull")
     }
-    console.log(res_data);
-    console.log(res);
     
   };
 
